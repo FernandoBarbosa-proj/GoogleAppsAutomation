@@ -1,0 +1,72 @@
+// What? Add a menu / ribbon to Google Docs
+// Why?  The code create buttons to mark tasks as DONE / NOT DONE / IN PROGRESS for and Agile company. 
+//*Exctracts of the code I developed to add the name of each team member in a file for them to fill their weekly tasks. 
+
+function onOpen() {
+  DocumentApp.getUi() // Or DocumentApp or SlidesApp or FormApp, SpreadsheetApp.
+      .createMenu('MENU_TITLE')
+      .addItem('Show alert', 'showAlert')
+      .addItem('Done', 'doneText')
+      .addToUi();
+}
+
+function showAlert() {
+  var ui = DocumentApp.getUi(); // Same variations.
+
+  var result = ui.alert(
+     'Please confirm',
+     'Are you sure you want to continue?',
+      ui.ButtonSet.YES_NO);
+
+  // Process the user's response.
+  if (result == ui.Button.YES) {
+    // User clicked "Yes".
+    ui.alert('Confirmation received.');
+  } else {
+    // User clicked "No" or X in the title bar.
+    ui.alert('Permission denied.');
+  }
+}
+
+
+function doneText() {
+
+// Insert some text at the cursor position and make it bold.
+var cursor = DocumentApp.getActiveDocument().getCursor();
+if (cursor) {
+  // Attempt to insert text at the cursor position. If the insertion returns null, the cursor's
+  // containing element doesn't allow insertions, so show the user an error message.
+  var element = cursor.insertText('ಠ‿ಠ');
+  if (element) {
+    element.setBold(true);
+  } else {
+    DocumentApp.getUi().alert('Cannot insert text here.');
+  }
+} else {
+  DocumentApp.getUi().alert('Cannot find a cursor.');
+}
+
+}
+
+function bold() {
+var body = DocumentApp.getActiveDocument().getBody();
+var foundElement = body.findText("Testing");
+
+while (foundElement != null) {
+    // Get the text object from the element
+    var foundText = foundElement.getElement().asText();
+
+    // Where in the element is the found text?
+    var start = foundElement.getStartOffset();
+    var end = foundElement.getEndOffsetInclusive();
+
+    // Set Bold
+    foundText.setBold(start, end, true);
+
+     // Change the background color to yellow
+    foundText.setBackgroundColor(start, end, "#FCFC00");
+
+    // Find the next match
+    foundElement = body.findText("Testing", foundElement);
+   }
+}
