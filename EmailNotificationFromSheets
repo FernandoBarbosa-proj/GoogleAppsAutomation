@@ -42,7 +42,7 @@ function checkReminder() {
   }
   if(warning_count) {
     Logger.log(msg);
-    MailApp.sendEmail("email1@xxx.com,email2@mpowerfinancing.com", "Email subject", msg);
+    MailApp.sendEmail("email1@xxx.com,email2@xxx", "Email subject", msg);
     //list emails, then email subject, then the body.
   }
 };
