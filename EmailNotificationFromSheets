@@ -1,0 +1,48 @@
+function checkReminder() {
+
+  // get the spreadsheet object
+  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+
+  // set the sheet XYZ as active
+  spreadsheet.setActiveSheet(spreadsheet.getSheetByName('XYZ'), true);
+
+  // Assign a name to this sheet
+  var sheet = spreadsheet.getActiveSheet();
+   
+  // figure out what the last row and last column are
+  var lastRow = sheet.getLastRow();
+  var lastCol = sheet.getLastColumn();
+
+  // Set the row what the names effectively start.
+  var startRow = 7;
+ 
+  // grab the last column of the spreadsheet, which has the days counter
+  var range = sheet.getRange(7,lastCol,lastRow-startRow+1,1);
+  var numRows = range.getNumRows();
+  var days_left_values = range.getValues();
+   
+  // Now, grab the reminder name column
+  range = sheet.getRange(7, 1, lastRow-startRow+1, 8);                 //Matrix of 8 columns to get ID
+  var reminder_info_values = range.getValues();
+   
+  var warning_count = 0;
+  var msg = "Plese check if borrower has kept all 6 pymts for Note IDs:\n\n";
+   
+  // Loop over the days left values
+  for (var i = 0; i <= numRows - 1; i++) {
+    var days_left = days_left_values[i][0];
+    if(days_left == 0) {
+      // if it's exactly 0, do something with the data.
+      var reminder_name = reminder_info_values[i][0];
+      var reminder_surname = reminder_info_values[i][1];
+      var reminder_noteid = reminder_info_values[i][7];               // The index of the ID is 7 because it starts in zero.
+      msg = msg + reminder_noteid +" - "+ reminder_name +" "+ reminder_surname +"\n";
+      warning_count++;
+    }
+  }
+  if(warning_count) {
+    Logger.log(msg);
+    MailApp.sendEmail("email1@xxx.com,email2@mpowerfinancing.com", "Email subject", msg);
+    //list emails, then email subject, then the body.
+  }
+};
